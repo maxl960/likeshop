@@ -15,7 +15,7 @@
 #// +----------------------------------------------------------------------
 #// | author: likeshopTeam
 #// +----------------------------------------------------------------------
-version: '3'
+version: '3.0.1'
 
 networks:
   likeshop:
@@ -29,6 +29,7 @@ services:
     restart: always
     depends_on:
       - "php7.2.4"
+      - "node"
     volumes:
       - ../server:/server
       - ./config/nginx/conf.d:/etc/nginx/conf.d
@@ -87,10 +88,16 @@ services:
 
   node:
     container_name: likeshop-node
-    image: node:10.15.3
+    # image: node:10.15.3
+    image: node:18.19.0
     restart: always
+    command: "serve -l 8080"
     volumes:
-      - ../web:/web
+      # - ../web:/web
+      - ../uniapp/dist/build/h5:/web
+      - ./data/node/local/lib/node_modules:/usr/local/lib/node_modules
+      - ./data/node/local/bin:/usr/local/bin
+      # - ./data/node/root:/root
     networks:
       - likeshop
     tty: true
